@@ -22,12 +22,12 @@ public partial class MainPage : Page, IDisposable
 	private bool _isFollowing;
 	private bool _disposed;
 	private DispatcherTimer? _santaTimer;
+	private MemoryLayer? _pinsLayer;
 	private PointFeature? _santaPin;
 	private readonly SantaService _santaService;
 	private double? _destinationLat;
 	private double? _destinationLon;
 	private Map? _map;
-	private bool initialValue = true;
 
 	public MainPage()
 	{
@@ -47,7 +47,6 @@ public partial class MainPage : Page, IDisposable
 		_map.Info += MapOnInfo;
 		_map.Layers.Add(OpenStreetMap.CreateTileLayer());
 		AddWidgets();
-		AddPinsLayer();
 
 		_map.Navigator.Limiter = new ViewportLimiterKeepWithinExtent();
 		StartSantaTracking();
@@ -77,16 +76,16 @@ public partial class MainPage : Page, IDisposable
 		return false;
 	}
 
-	private void AddPinsLayer()
+	private void AddPinsLayer(MPoint initialPoint)
 	{
-		_santaPin = new PointFeature(SphericalMercator.FromLonLat(0, 0).ToMPoint());
+		_santaPin = new PointFeature(initialPoint);
 		_santaPin.Styles.Add(CreateCalloutStyle(title: "Santa Claus", subtitle: "Ho Ho Ho!"));
 
-		var pinsLayer = new MemoryLayer
+		_pinsLayer = new MemoryLayer
 		{
 			Name = "Santa Pin Layer",
 			IsMapInfoLayer = true,
-			Features = new MemoryProvider([_santaPin]).Features,
+			Features = [_santaPin],
 			Style = new SymbolStyle()
 			{
 				ImageSource = typeof(MainPage).LoadImageSource(@"Assets.Maps.santahat.svg").ToString(),
@@ -95,7 +94,7 @@ public partial class MainPage : Page, IDisposable
 			}
 		};
 
-		_map?.Layers.Add(pinsLayer);
+		_map?.Layers.Add(_pinsLayer);
 	}
 
 	private ImageButtonWidget CreateImageButtonWidget(string iconPath, Func<ImageButtonWidget, WidgetEventArgs, bool> tapped) => new()
@@ -148,21 +147,28 @@ public partial class MainPage : Page, IDisposable
 	private async void SantaTimer_Tick(object? sender, object e)
 	{
 		var update = await _santaService.GetNextLocation(_destinationLat, _destinationLon);
+		var newPoint = SphericalMercator.FromLonLat(update.Longitude, update.Latitude).ToMPoint();
 
 		DispatcherQueue.TryEnqueue(() =>
 		{
-			if (_santaPin is { } && _map is { } map)
+			if (_map is { } map)
 			{
-				var newPoint = SphericalMercator.FromLonLat(update.Longitude, update.Latitude).ToMPoint();
-				_santaPin.Modified();
-				_santaPin.Point.X = newPoint.X;
-				_santaPin.Point.Y = newPoint.Y;
-
-				if (initialValue || _isFollowing)
+				if (_pinsLayer is null)
 				{
-					initialValue = false;
+					AddPinsLayer(newPoint);
 					map.Navigator.CenterOnAndZoomTo(newPoint, map.Navigator.Viewport.Resolution);
 				}
+				else if (_santaPin is { } pin)
+				{
+					pin.Modified();
+					pin.Point.X = newPoint.X;
+					pin.Point.Y = newPoint.Y;
+
+					if (_isFollowing)
+					{
+						map.Navigator.CenterOnAndZoomTo(newPoint, map.Navigator.Viewport.Resolution);
+					}
+				}	
 			}
 
 			var locationText = $"{update.LocationName} ({update.Latitude:F1}°N, {update.Longitude:F1}°E)";
@@ -175,20 +181,6 @@ public partial class MainPage : Page, IDisposable
 			}
 			LocationText.Text = locationText;
 			SpeedText.Text = $"{(int)update.Speed:N0} km/h";
-
-			if (_destinationLat.HasValue && update.DistanceFromUser.HasValue && update.Speed > 0)
-			{
-				var hoursToDestination = update.DistanceFromUser.Value / update.Speed;
-				var timeToDestination = TimeSpan.FromHours(hoursToDestination);
-
-				ETAText.Text = timeToDestination.TotalHours >= 1
-					? $"{timeToDestination.TotalHours:F1} hours"
-					: $"{timeToDestination.TotalMinutes:F0} min";
-			}
-			else
-			{
-				ETAText.Text = "--:--";
-			}
 		});
 	}
 
@@ -197,7 +189,6 @@ public partial class MainPage : Page, IDisposable
 		if (!_disposed)
 		{
 			_santaTimer?.Stop();
-			_geocodingService?.Dispose();
 			_santaService?.Dispose();
 			_disposed = true;
 		}

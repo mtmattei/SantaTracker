@@ -26,6 +26,7 @@ public partial class App : Application
 				// Switch to Development environment when running in DEBUG
 				.UseEnvironment(Environments.Development)
 #endif
+				.UseLogging(lb => lb.SetMinimumLevel(LogLevel.Warning))
 				.ConfigureServices((context, services) =>
 				{
 					// TODO: Register your services
