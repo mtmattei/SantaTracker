@@ -1,4 +1,4 @@
-﻿global using System.Collections.Immutable;
+global using System.Collections.Immutable;
 global using CommunityToolkit.Mvvm.ComponentModel;
 global using CommunityToolkit.Mvvm.Input;
 global using Microsoft.Extensions.DependencyInjection;
@@ -12,4 +12,3 @@ global using SantaTracker.Models;
 global using SantaTracker.Presentation;
 global using SantaTracker.Services.Caching;
 global using SantaTracker.Services.Endpoints;
-global using ApplicationExecutionState = Windows.ApplicationModel.Activation.ApplicationExecutionState;

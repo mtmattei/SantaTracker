@@ -16,17 +16,16 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <utu:NavigationBar Grid.Row="0"
-                           Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <utu:NavigationBar Grid.Row="0">
             <utu:NavigationBar.Content>
                 <TextBlock Text="🔴 Live Tracking Santa Claus"
                        Margin="12,8"
-                       Foreground="White"
                        FontSize="20" />
             </utu:NavigationBar.Content>
         </utu:NavigationBar>
 
         <maps:MapControl Grid.Row="1"
+					
                          x:Name="SantaMap"
                          VerticalAlignment="Stretch"
                          HorizontalAlignment="Stretch" />
