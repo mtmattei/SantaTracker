@@ -1,3 +1,4 @@
+using Mapsui.Widgets.InfoWidgets;
 using Uno.Resizetizer;
 
 namespace SantaTracker;
@@ -10,6 +11,7 @@ public partial class App : Application
 	public App()
 	{
 		this.InitializeComponent();
+		LoggingWidget.ShowLoggingInMap = ShowLoggingInMap.Never;
 	}
 
 	protected Window? MainWindow { get; private set; }
@@ -26,7 +28,6 @@ public partial class App : Application
 				// Switch to Development environment when running in DEBUG
 				.UseEnvironment(Environments.Development)
 #endif
-				.UseLogging(lb => lb.SetMinimumLevel(LogLevel.Warning))
 				.ConfigureServices((context, services) =>
 				{
 					// TODO: Register your services
@@ -36,9 +37,6 @@ public partial class App : Application
 			);
 		MainWindow = builder.Window;
 
-#if DEBUG
-		MainWindow.UseStudio();
-#endif
 		MainWindow.SetWindowIcon();
 
 		Host = await builder.NavigateAsync<Shell>();

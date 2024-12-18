@@ -10,6 +10,7 @@ using Mapsui.Tiling;
 using Mapsui.Tiling.Layers;
 using Mapsui.Widgets;
 using Mapsui.Widgets.ButtonWidgets;
+using Mapsui.Widgets.InfoWidgets;
 using SantaTracker.Services;
 
 namespace SantaTracker.Presentation;

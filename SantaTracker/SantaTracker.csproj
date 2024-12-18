@@ -34,18 +34,11 @@
     -->
 		<UnoFeatures>
 			Material;
-			Dsp;
 			Hosting;
 			Toolkit;
-			Logging;
 			Mvvm;
 			Skia;
-			Configuration;
-			Http;
-			Serialization;
-			Localization;
 			Navigation;
-			ThemeService;
 		</UnoFeatures>
 	</PropertyGroup>
 	<ItemGroup>
