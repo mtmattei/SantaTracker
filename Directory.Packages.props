@@ -8,8 +8,6 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Mapsui.Forms" Version="4.1.8" />
-    <PackageVersion Include="Mapsui.Uno.WinUI" Version="4.1.8" />
-    <PackageVersion Include="SkiaSharp.Views.Uno.WinUI" Version="2.88.9" />
+    <PackageVersion Include="Mapsui.Uno.WinUI" Version="5.0.0-beta.6" />
   </ItemGroup>
 </Project>

@@ -1,68 +1,53 @@
 ﻿<Page x:Class="SantaTracker.Presentation.MainPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:local="using:SantaTracker.Presentation"
-      xmlns:uen="using:Uno.Extensions.Navigation.UI"
-      xmlns:utu="using:Uno.Toolkit.UI"
-      xmlns:um="using:Uno.Material"
-      NavigationCacheMode="Required"
-      xmlns:maps="using:Mapsui.UI.WinUI"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:local="using:SantaTracker.Presentation"
+	  xmlns:uen="using:Uno.Extensions.Navigation.UI"
+	  xmlns:utu="using:Uno.Toolkit.UI"
+	  xmlns:um="using:Uno.Material"
+	  NavigationCacheMode="Required"
+	  xmlns:maps="using:Mapsui.UI.WinUI"
+	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="2*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
 
-        <utu:NavigationBar Grid.Row="0"
-                           Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-            <utu:NavigationBar.Content>
-                <TextBlock Text="🔴 Live Tracking Santa Claus"
-                       Margin="12,8"
-                       Foreground="White"
-                       FontSize="20" />
-            </utu:NavigationBar.Content>
-        </utu:NavigationBar>
+		<utu:NavigationBar Grid.Row="0">
+			<utu:NavigationBar.Content>
+				<TextBlock Text="🔴 Live Tracking Santa Claus"
+						   Margin="12,8"
+						   FontSize="20" />
+			</utu:NavigationBar.Content>
+		</utu:NavigationBar>
 
-        <maps:MapControl Grid.Row="1"
-                         x:Name="SantaMap"
-                         VerticalAlignment="Stretch"
-                         HorizontalAlignment="Stretch" />
+		<maps:MapControl Grid.Row="1"
+						 x:Name="SantaMap"
+						 VerticalAlignment="Stretch"
+						 HorizontalAlignment="Stretch" />
 
-        <StackPanel Grid.Row="2"
-                    Margin="12"
-                    Spacing="8">
-            <TextBox x:Name="AddressTextBox"
-                     PlaceholderText="Enter your address..."
-                     Header="Your Address" />
+		<Grid ColumnSpacing="12"
+			  Grid.Row="2"
+			  Margin="12">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
 
-            <Grid ColumnSpacing="12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0">
+				<Run Text="Speed: " />
+				<Run x:Name="SpeedText"
+					 Text="0 mph" />
+			</TextBlock>
 
-                <TextBlock Grid.Column="0">
-                    <Run Text="Speed: " />
-                    <Run x:Name="SpeedText"
-                         Text="0 mph" />
-                </TextBlock>
-
-                <TextBlock Grid.Column="1">
-                    <Run Text="Location: " />
-                    <Run x:Name="LocationText"
-                         Text="North Pole" />
-                </TextBlock>
-
-                <TextBlock Grid.Column="2">
-                    <Run Text="ETA: " />
-                    <Run x:Name="ETAText"
-                         Text="--:--" />
-                </TextBlock>
-            </Grid>
-        </StackPanel>
-    </Grid>
+			<TextBlock Grid.Column="1" HorizontalAlignment="Right">
+				<Run Text="Location: " />
+				<Run x:Name="LocationText"
+					 Text="North Pole" />
+			</TextBlock>
+		</Grid>
+	</Grid>
 </Page>
